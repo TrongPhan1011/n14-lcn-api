@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true,
-        index: true,
+
         unique: true,
     },
     birthday: String,
@@ -55,6 +55,8 @@ userSchema.set('toJSON', {
         delete ret._id;
     },
 });
+
+userSchema.index({ fullName: 'text', phoneNumber: 'text' });
 
 var User = mongoose.model('User', userSchema);
 

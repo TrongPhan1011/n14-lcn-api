@@ -49,6 +49,22 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    getUserByTextSearch: async (req, res) => {
+        try {
+            var params = req.query;
+
+            var valueSearch = params.q;
+            var limitResult = params._limit;
+
+            const listUser = await User.find({ $text: { $search: valueSearch } }).limit(limitResult);
+
+            // const user = await User.findOne({ phoneNumber: req.params.phoneNumber });
+
+            return res.status(200).json(listUser);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = userREST;
