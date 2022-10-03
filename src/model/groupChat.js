@@ -76,6 +76,13 @@ const groupChatSchema = new mongoose.Schema({
     ],
     message: [messageSchema],
 });
+groupChatSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+        delete ret._id;
+    },
+});
 
 var GroupChat = mongoose.model('GroupChat', groupChatSchema);
 
