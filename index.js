@@ -21,7 +21,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 app.use(morgan('common'));
 
-app.use('/api/user', groupChat);
+app.use('/api/user', userRoute);
 
 app.use('/api/chat/', groupChat);
 
