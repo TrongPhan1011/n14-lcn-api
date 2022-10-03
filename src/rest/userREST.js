@@ -23,8 +23,8 @@ const userREST = {
             const user = User.findById(req.body.idUser);
             const friend = User.findById(req.body.idFriend);
 
-            await user.updateOne({ $push: { friend: { id: req.body.idFriend } } });
-            await friend.updateOne({ $push: { friend: { id: req.body.idUser } } });
+            await user.updateOne({ $push: { friend: { id: req.body.idFriend, status: 0 } } });
+            await friend.updateOne({ $push: { friend: { id: req.body.idUser, status: 2 } } });
 
             return res.status(200).json('add friend successfully');
         } catch (error) {
@@ -63,6 +63,22 @@ const userREST = {
             return res.status(200).json(listUser);
         } catch (error) {
             res.status(500).json(error);
+        }
+    },
+
+    getAllFriendByStatus: async (req, res) => {
+        try {
+            var params = req.query;
+            var status = params.status;
+            const user = await User.findById({ _id: req.params.id })
+                .populate('friend.id')
+                .where('friend.status')
+                .equals(status);
+
+            console.log(user);
+            return res.status(200).json(user);
+        } catch (error) {
+            console.log(error);
         }
     },
 };
