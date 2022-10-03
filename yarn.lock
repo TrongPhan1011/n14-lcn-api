@@ -435,6 +435,7 @@
   "resolved" "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
   "version" "0.5.2"
 
+<<<<<<< HEAD
 "fsevents@~2.3.2":
   "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
   "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
@@ -445,6 +446,13 @@
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
   "version" "1.1.1"
 
+=======
+"function-bind@^1.1.1":
+  "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
+  "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
+  "version" "1.1.1"
+
+>>>>>>> aa3ca3e1e600ce98697b3795f9cbe5c576dab529
 "function.prototype.name@^1.1.5":
   "integrity" "sha512-uN7m/BzVKQnCUF/iW8jYea67v++2u7m5UgENbHRtdDVclOUP+FMPlCNdmk0h/ysGyo2tavMJEDqJAkJdRa1vMA=="
   "resolved" "https://registry.npmjs.org/function.prototype.name/-/function.prototype.name-1.1.5.tgz"

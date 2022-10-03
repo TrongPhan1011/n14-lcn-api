@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true,
-
+        index: true,
         unique: true,
     },
     birthday: String,
@@ -56,7 +56,7 @@ userSchema.set('toJSON', {
     },
 });
 
-userSchema.index({ fullName: 'text', phoneNumber: 'text' });
+userSchema.index({ fullName: 'text' });
 
 var User = mongoose.model('User', userSchema);
 
