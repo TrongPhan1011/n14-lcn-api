@@ -17,6 +17,15 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    getChatById: async (req, res) => {
+        try {
+            const chat = await GroupChat.findById(req.params.id);
+
+            return res.status(200).json(chat);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = userREST;

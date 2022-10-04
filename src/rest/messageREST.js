@@ -18,11 +18,10 @@ const messageREST = {
     },
     addMess: async (req, res) => {
         try {
-            var idChat = req.query.idChat;
-
             var newMess = new Message(req.body);
             var saveMess = await newMess.save();
 
+            var idChat = newMess.idChat;
             var chat = GroupChat.findById(idChat);
             var message = await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
 

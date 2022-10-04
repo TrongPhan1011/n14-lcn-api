@@ -17,5 +17,6 @@ router.get('/id/:id', userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', userREST.getUserByPhoneNumber);
 router.get('/textsearch', userREST.getUserByTextSearch);
 router.get('/friend/:id', userREST.getAllFriendByStatus);
+router.put('/id/:id', userREST.updateUser);
 
 module.exports = router;
