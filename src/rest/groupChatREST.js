@@ -1,58 +1,9 @@
 const { GroupChat } = require('../model/groupChat');
-const { User } = require('../model/user');
 
-const chatREST = {
+const userREST = {
     addChat: async (req, res) => {
         try {
-            const newChat = new GroupChat(req.body);
-            const saveChat = await newChat.save();
-            var idNewChat = saveChat.id;
-
-            for (var idUser of saveChat.member) {
-                var member = User.findById(idUser);
-
-                await member.updateOne({ $push: { listGroup: idNewChat } });
-            }
-
-            return res.status(200).json(saveChat);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    },
-    addUserSeenToMess: async (req, res) => {
-        try {
-            var idChat = req.params.idChat;
-            var idMess = req.params.idMess;
-            var chat = await GroupChat.findById(idChat);
-
-            // console.log(chat.message);
-
-            // var mess = await chat.findOne({
-            //     'message.id': idMess,
-            // });
-
-            // console.log(chat.mess);
-            // await GroupChat.findOneAndUpdate(
-            //     { id: idChat, message: { $elemMatch: idMess } },
-            //     { 'message.seen': req.body },
-            //     { new: true, safe: true, upsert: true },
-            // );
-
-            // var message = await chat.updateOne();
-
-            return res.status(200).json(chat);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    },
-    addMessToChat: async (req, res) => {
-        try {
-            var idChat = req.params.id;
-
-            var chat = GroupChat.findById(idChat);
-            var message = await chat.findOneAndUpdate({ $push: { message: req.body } });
-
-            return res.status(200).json(message);
+            return res.status(200);
         } catch (error) {
             res.status(500).json(error);
         }
@@ -66,18 +17,6 @@ const chatREST = {
             res.status(500).json(error);
         }
     },
-    deleteMess: async (req, res) => {
-        try {
-            const group = GroupChat.findById(req.params.id);
-            const filter = { 'message.id': '633bc5cd271f28dcda24dc89' };
-            const update = { 'message.status': 1 };
-            await group.findOneAndUpdate(filter, update);
-            return res.status(200).json('updated');
-        } catch (error) {
-            console.log(error);
-            res.status(500).json(error);
-        }
-    },
 };
 
-module.exports = chatREST;
+module.exports = userREST;
