@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const userRoute = require('./src/routes/userRoute');
 const groupChat = require('./src/routes/groupChatRoute');
 
+const messageRoute = require('./src/routes/messageRoute');
+
 const app = express();
 
 dotenv.config();
@@ -23,7 +25,8 @@ app.use(morgan('common'));
 
 app.use('/api/user', userRoute);
 
-app.use('/api/chat/', groupChat);
+app.use('/api/chat', groupChat);
+app.use('/api/message', messageRoute);
 
 app.listen(8080, () => {
     console.log('server is running...');
