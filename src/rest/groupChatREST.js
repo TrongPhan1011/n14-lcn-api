@@ -17,6 +17,18 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    deleteMess: async (req, res) => {
+        try {
+            const group = GroupChat.findById(req.params.id);
+            const filter = { 'message.id': '633bc5cd271f28dcda24dc89' };
+            const update = { 'message.status': 1 };
+            await group.findOneAndUpdate(filter, update);
+            return res.status(200).json('updated');
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = userREST;

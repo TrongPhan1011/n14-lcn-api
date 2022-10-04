@@ -23,8 +23,8 @@ const userREST = {
             const user = User.findById(req.body.idUser);
             const friend = User.findById(req.body.idFriend);
 
-            await user.updateOne({ $push: { friend: { id: req.body.idFriend, status: 0 } } });
-            await friend.updateOne({ $push: { friend: { id: req.body.idUser, status: 2 } } });
+            await user.updateOne({ $push: { friend: { id: req.body.idFriend, status: 2 } } });
+            await friend.updateOne({ $push: { friend: { id: req.body.idUser, status: 0 } } });
 
             return res.status(200).json('add friend successfully');
         } catch (error) {
@@ -75,7 +75,6 @@ const userREST = {
                 .where('friend.status')
                 .equals(status);
 
-            console.log(user);
             return res.status(200).json(user);
         } catch (error) {
             console.log(error);
