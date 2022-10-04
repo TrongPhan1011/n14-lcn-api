@@ -59,9 +59,9 @@ const chatREST = {
     },
     getAllChatByUserId: async (req, res) => {
         try {
-            const user = await GroupChat.findById(req.query.id);
+            const chat = await GroupChat.find({ member: req.query.id });
 
-            return res.status(200).json(user);
+            return res.status(200).json(chat);
         } catch (error) {
             res.status(500).json(error);
         }
