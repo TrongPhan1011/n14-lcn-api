@@ -1,19 +1,16 @@
 const mongoose = require('mongoose');
 
-const fileSchema = new mongoose.Schema(
-    {
-        path: String,
-        title: String,
-
+const fileSchema = new mongoose.Schema({
+    path: String,
+    title: String,
+    createAt: String,
+    status: Number,
+    fileType: {
+        name: String,
         status: Number,
-        fileType: {
-            name: String,
-            status: Number,
-            _id: false,
-        },
+        _id: false,
     },
-    { timestamps: true },
-);
+});
 
 const messageSchema = new mongoose.Schema(
     {
@@ -35,7 +32,6 @@ const messageSchema = new mongoose.Schema(
                 id: {
                     type: mongoose.Schema.ObjectId,
                     ref: 'User',
-                    unique: true,
                 },
                 seenAt: String,
                 _id: false,

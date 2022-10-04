@@ -23,9 +23,23 @@ const messageREST = {
 
             // var idChat = newMess.idChat;
             // var chat = GroupChat.findById(idChat);
-            // var message = await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
+            // await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
 
-            return res.status(200).json('sdf');
+            return res.status(200).json(saveMess);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    deleteMess: async (req, res) => {
+        try {
+            await GroupChat.findOneAndUpdate(
+                { _id: req.params.id },
+                { $pull: { message: req.params.idMess } },
+                { safe: true, multi: false },
+            );
+
+            return res.status(200).json('chat');
         } catch (error) {
             res.status(500).json(error);
         }
