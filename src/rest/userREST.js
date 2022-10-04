@@ -24,8 +24,8 @@ const userREST = {
             const user = User.findById(req.body.idUser);
             const friend = User.findById(req.body.idFriend);
 
-            await user.updateOne({ $push: { friend: { id: req.body.idFriend } } });
-            await friend.updateOne({ $push: { friend: { id: req.body.idUser } } });
+            await user.updateOne({ $push: { friend: { id: req.body.idFriend, status: 2 } } });
+            await friend.updateOne({ $push: { friend: { id: req.body.idUser, status: 0 } } });
 
             return res.status(200).json('add friend successfully');
         } catch (error) {
@@ -74,6 +74,29 @@ const userREST = {
                 { safe: true, multi: false },
             );
             return res.status(200).json('leave chat successfully');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getAllFriendByStatus: async (req, res) => {
+        try {
+            var params = req.query;
+            var status = params.status;
+            const user = await User.findById({ _id: req.params.id })
+                .populate('friend.id')
+                .where('friend.status')
+                .equals(status);
+
+            return res.status(200).json(user);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    updateUser: async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            await user.updateOne({ $set: req.body });
+            res.status(200).json('update thành công');
         } catch (error) {
             res.status(500).json(error);
         }
