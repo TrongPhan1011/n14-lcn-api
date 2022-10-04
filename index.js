@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 const userRoute = require('./src/routes/userRoute');
 const groupChat = require('./src/routes/groupChatRoute');
@@ -22,9 +23,9 @@ mongoose.connect(process.env.DATABASE_URL, () => {
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 app.use(morgan('common'));
+app.use(cookieParser());
 
 app.use('/api/user', userRoute);
-
 app.use('/api/chat', groupChat);
 app.use('/api/message', messageRoute);
 

@@ -21,11 +21,11 @@ const messageREST = {
             var newMess = new Message(req.body);
             var saveMess = await newMess.save();
 
-            var idChat = newMess.idChat;
-            var chat = GroupChat.findById(idChat);
-            var message = await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
+            // var idChat = newMess.idChat;
+            // var chat = GroupChat.findById(idChat);
+            // var message = await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
 
-            return res.status(200).json(message);
+            return res.status(200).json('sdf');
         } catch (error) {
             res.status(500).json(error);
         }

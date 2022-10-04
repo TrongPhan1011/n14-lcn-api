@@ -1,35 +1,37 @@
 const mongoose = require('mongoose');
 
-const groupChatSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    userCreate: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-    },
-
-    avatar: {
-        type: String,
-        default: null,
-    },
-    createAt: String,
-    updateAt: String,
-    status: Number,
-    member: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
+const groupChatSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        userCreate: {
+            type: mongoose.Schema.ObjectId,
             ref: 'User',
         },
-    ],
-    message: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Message',
+
+        avatar: {
+            type: String,
+            default: null,
         },
-    ],
-});
+
+        status: Number,
+        member: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        message: [
+            {
+                type: mongoose.Schema.ObjectId,
+                ref: 'Message',
+            },
+        ],
+    },
+    { timestamps: true },
+);
 groupChatSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
