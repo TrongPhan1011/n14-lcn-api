@@ -16,5 +16,6 @@ router.put('/addfriend/', userREST.addFriend);
 router.get('/id/:id', userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', userREST.getUserByPhoneNumber);
 router.get('/textsearch', userREST.getUserByTextSearch);
+router.put('/id/:id', userREST.updateUser);
 
 module.exports = router;
