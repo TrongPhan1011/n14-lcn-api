@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const chatREST = require('../rest/groupChatREST');
+const middleAuth = require('../rest/middleAuth');
 
 router.post('/', chatREST.addChat);
 

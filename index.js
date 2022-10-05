@@ -8,8 +8,8 @@ const cookieParser = require('cookie-parser');
 
 const userRoute = require('./src/routes/userRoute');
 const groupChat = require('./src/routes/groupChatRoute');
-
 const messageRoute = require('./src/routes/messageRoute');
+const authRoute = require('./src/routes/autthRoute');
 
 const app = express();
 
@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use('/api/user', userRoute);
 app.use('/api/chat', groupChat);
 app.use('/api/message', messageRoute);
+app.use('/api/auth', authRoute);
 
 app.listen(8080, () => {
     console.log('server is running...');
