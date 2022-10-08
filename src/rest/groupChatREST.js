@@ -1,4 +1,5 @@
 const { GroupChat } = require('../model/groupChat');
+const { User } = require('../model/user');
 
 const userREST = {
     addChat: async (req, res) => {
@@ -20,9 +21,11 @@ const userREST = {
     },
     getAllChatByUserId: async (req, res) => {
         try {
-            const chat = await GroupChat.find({ member: req.query.id });
+            const user = await User.findById(req.query.id).populate('listGroup');
 
-            return res.status(200).json(chat);
+            const listGroupChat = user.listGroup;
+
+            return res.status(200).json(listGroupChat);
         } catch (error) {
             res.status(500).json(error);
         }

@@ -1,5 +1,6 @@
 const { User } = require('../model/user');
 const { Message } = require('../model/message');
+const { AuthModel } = require('../model/authModel');
 
 const userREST = {
     addUser: async (req, res) => {
@@ -46,6 +47,20 @@ const userREST = {
             const user = await User.findOne({ phoneNumber: req.params.phoneNumber });
 
             return res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getUserByAccountId: async (req, res) => {
+        try {
+            const accountId = req.params.accountId;
+            const account = await AuthModel.findOne({ id: accountId });
+
+            if (!!account) {
+                const user = await User.findOne({ email: account.userName });
+
+                return res.status(200).json(user);
+            } else res.status(404).json('Khong tim thay account');
         } catch (error) {
             res.status(500).json(error);
         }

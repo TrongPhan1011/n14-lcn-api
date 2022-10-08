@@ -12,7 +12,7 @@ const authREST = {
             },
             process.env.JWT_ACCESS_TOKEN,
             {
-                expiresIn: '1h',
+                expiresIn: '30d',
             },
         );
         return accessToken;
@@ -38,7 +38,7 @@ const authREST = {
             // userName = phoneNumber
 
             const newAuth = await AuthModel({
-                userName: req.body.phoneNumber,
+                userName: req.body.email,
                 password: hashPass,
             });
             console.log(newAuth);

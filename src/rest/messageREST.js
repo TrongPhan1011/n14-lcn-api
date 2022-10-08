@@ -21,9 +21,9 @@ const messageREST = {
             var newMess = new Message(req.body);
             var saveMess = await newMess.save();
 
-            // var idChat = newMess.idChat;
-            // var chat = GroupChat.findById(idChat);
-            // await chat.findOneAndUpdate({ $push: { message: saveMess.id } });
+            var idChat = newMess.idChat;
+            var chat = GroupChat.findById(idChat);
+            await chat.findOneAndUpdate({ $push: { message: saveMess._id } });
 
             return res.status(200).json(saveMess);
         } catch (error) {
@@ -40,6 +40,14 @@ const messageREST = {
             );
 
             return res.status(200).json('chat');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getMessageById: async (req, res) => {
+        try {
+            var message = await Message.findById(req.params.id).populate('authorID');
+            res.status(200).json(message);
         } catch (error) {
             res.status(500).json(error);
         }
