@@ -21,7 +21,7 @@ mongoose.connect(process.env.DATABASE_URL, () => {
 });
 
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
 app.use(morgan('common'));
 app.use(cookieParser());
 

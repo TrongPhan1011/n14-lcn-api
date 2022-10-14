@@ -12,7 +12,7 @@ const authREST = {
             },
             process.env.JWT_ACCESS_TOKEN,
             {
-                expiresIn: '30d',
+                expiresIn: '15d',
             },
         );
         return accessToken;
@@ -24,7 +24,7 @@ const authREST = {
             },
             process.env.JWT_REFRESH_TOKEN,
             {
-                expiresIn: '30d',
+                expiresIn: '365d',
             },
         );
         return refreshToken;
@@ -41,13 +41,12 @@ const authREST = {
                 userName: req.body.email,
                 password: hashPass,
             });
-            console.log(newAuth);
 
             // create new user
 
             // save
-            const user = await newAuth.save();
-            res.status(200).json(user);
+            const account = await newAuth.save();
+            res.status(200).json(account);
         } catch (error) {
             res.status(500).json(error);
         }
