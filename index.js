@@ -10,6 +10,7 @@ const userRoute = require('./src/routes/userRoute');
 const groupChat = require('./src/routes/groupChatRoute');
 const messageRoute = require('./src/routes/messageRoute');
 const authRoute = require('./src/routes/autthRoute');
+const otpRoute = require('./src/routes/otpRoute');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/user', userRoute);
 app.use('/api/chat', groupChat);
 app.use('/api/message', messageRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/otp', otpRoute);
 
 app.listen(8080, () => {
     console.log('server is running...');
