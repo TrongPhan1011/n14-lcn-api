@@ -1,3 +1,5 @@
+const middleAuth = require('../rest/middleAuth');
+
 const router = require('express').Router();
 
 const messageREST = require('../rest/messageREST');

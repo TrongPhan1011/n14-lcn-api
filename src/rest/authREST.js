@@ -60,10 +60,7 @@ const authREST = {
                 userName: req.body.email,
                 password: hashPass,
             });
-<<<<<<< HEAD
-=======
             const user = await newAuth.save();
->>>>>>> a616f714a4ce8ea24c5b413b3123b4c80a52f8ea
 
             // create new user
             await User.create({
@@ -73,17 +70,11 @@ const authREST = {
                 birthday: req.body.birthday,
             });
 
-<<<<<<< HEAD
-            // save
-            const account = await newAuth.save();
-            res.status(200).json(account);
-=======
             //delete OTP
             if (user) {
                 await OTP.deleteMany({ email: req.body.email });
             }
             res.status(200).json(user);
->>>>>>> a616f714a4ce8ea24c5b413b3123b4c80a52f8ea
         } catch (error) {
             res.status(500).json(error);
         }
