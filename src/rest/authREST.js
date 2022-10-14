@@ -1,8 +1,19 @@
 const bscypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const sgMail = require('@sendgrid/mail');
 const { TokenModel } = require('../model/token');
 const { AuthModel } = require('../model/authModel.js');
+const { response } = require('express');
+const { User } = require('../model/user');
+const { OTP } = require('../model/otp');
+const API_KEY = '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';
+sgMail.setApiKey(API_KEY);
+const message = {
+    to: 'lcncnmnhom14@gmail.com',
+    from: '5442654@gmail.com',
+    subject: 'hello test',
+    text: 'mã otp của bạn là 1234',
+};
 
 const authREST = {
     createAccessToken: (user) => {
@@ -33,20 +44,36 @@ const authREST = {
         try {
             const salt = await bscypt.genSalt(10);
             const hashPass = await bscypt.hash(req.body.password, salt);
+            //veirify OTP
+            const otpNhapVao = req.body.otp;
+
+            const otpDaGui = await OTP.find({ email: req.body.email });
+            const lastOTP = otpDaGui[otpDaGui.length - 1];
 
             // create new auth
-            // userName = phoneNumber
+            // userName = email
+            if (otpNhapVao != lastOTP.otp) {
+                return res.status(401).json('Nhap sai otp');
+            }
 
             const newAuth = await AuthModel({
                 userName: req.body.email,
                 password: hashPass,
             });
-            console.log(newAuth);
+            const user = await newAuth.save();
 
             // create new user
+            await User.create({
+                fullName: req.body.userName,
+                email: req.body.email,
+                gender: req.body.gender,
+                birthday: req.body.birthday,
+            });
 
-            // save
-            const user = await newAuth.save();
+            //delete OTP
+            if (user) {
+                await OTP.deleteMany({ email: req.body.email });
+            }
             res.status(200).json(user);
         } catch (error) {
             res.status(500).json(error);
