@@ -9,7 +9,7 @@ router.put('/addfriend/', userREST.addFriend);
 
 router.get('/id/:id', middleAuth.verifyToken, userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', middleAuth.verifyToken, userREST.getUserByPhoneNumber);
-router.get('/account/:accountId', middleAuth.verifyToken, userREST.getUserByAccountId);
+router.get('/account/:accountId', userREST.getUserByAccountId);
 router.get('/textsearch', middleAuth.verifyToken, userREST.getUserByTextSearch);
 router.put('/leave_chat', middleAuth.verifyToken, userREST.leaveChat);
 router.get('/friend/:id', middleAuth.verifyToken, userREST.getAllFriendByStatus);

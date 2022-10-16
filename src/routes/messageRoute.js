@@ -8,5 +8,6 @@ router.post('/', middleAuth.verifyToken, messageREST.addMess);
 router.put('/add_seen/:id', middleAuth.verifyToken, messageREST.addUserSeenToMess);
 router.put('/delete_mess/:id/:idMess', middleAuth.verifyToken, messageREST.deleteMess);
 router.get('/id/:id', middleAuth.verifyToken, messageREST.getMessageById);
+router.get('/limit', middleAuth.verifyToken, messageREST.getMessageByIdChat);
 
 module.exports = router;

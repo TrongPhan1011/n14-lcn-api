@@ -52,6 +52,20 @@ const messageREST = {
             res.status(500).json(error);
         }
     },
+    getMessageByIdChat: async (req, res) => {
+        try {
+            var limit = req.query.limit;
+
+            var listMess = await Message.find({ idChat: req.query.idchat })
+                .sort({ created_at: -1 })
+                .limit(limit)
+                .populate('authorID');
+
+            res.status(200).json(listMess);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = messageREST;
