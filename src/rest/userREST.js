@@ -54,9 +54,11 @@ const userREST = {
     getUserByAccountId: async (req, res) => {
         try {
             const accountId = req.params.accountId;
-            const account = await AuthModel.findOne({ id: accountId });
+
+            const account = await AuthModel.findOne({ _id: accountId });
 
             if (!!account) {
+                // console.log(account);
                 const user = await User.findOne({ email: account.userName });
 
                 return res.status(200).json(user);

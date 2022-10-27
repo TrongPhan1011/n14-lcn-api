@@ -57,11 +57,11 @@ const messageREST = {
             var limit = req.query.limit;
 
             var listMess = await Message.find({ idChat: req.query.idchat })
-                .sort({ created_at: -1 })
+                .sort({ createdAt: -1 })
                 .limit(limit)
                 .populate('authorID');
 
-            res.status(200).json(listMess);
+            res.status(200).json(listMess.reverse());
         } catch (error) {
             res.status(500).json(error);
         }
