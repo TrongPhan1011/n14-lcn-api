@@ -52,8 +52,11 @@ const authREST = {
 
             // create new auth
             // userName = email
-            if (otpNhapVao != lastOTP.otp) {
-                return res.status(401).json('Nhap sai otp');
+            console.log(lastOTP.otp);
+
+            if (otpNhapVao !== lastOTP.otp) {
+                console.log('fff');
+                return res.status(401).json('OTP không đúng!');
             }
 
             const newAuth = await AuthModel({
@@ -66,6 +69,7 @@ const authREST = {
             await User.create({
                 fullName: req.body.userName,
                 email: req.body.email,
+                phoneNumber: '',
                 gender: req.body.gender,
                 birthday: req.body.birthday,
             });
@@ -77,6 +81,7 @@ const authREST = {
             res.status(200).json(user);
         } catch (error) {
             res.status(500).json(error);
+            console.log(error);
         }
     },
     login: async (req, res) => {

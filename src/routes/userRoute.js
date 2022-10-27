@@ -5,7 +5,9 @@ const middleAuth = require('../rest/middleAuth');
 
 router.post('/', userREST.addUser);
 
-router.put('/addfriend/', userREST.addFriend);
+router.put('/addfriend/', middleAuth.verifyToken, userREST.addFriend);
+router.put('/deletefriend/', middleAuth.verifyToken, userREST.deleteFriend);
+router.put('/acceptfriend/', middleAuth.verifyToken, userREST.acceptFriend);
 
 router.get('/id/:id', middleAuth.verifyToken, userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', middleAuth.verifyToken, userREST.getUserByPhoneNumber);
