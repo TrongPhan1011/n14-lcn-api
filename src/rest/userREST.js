@@ -1,6 +1,7 @@
 const { User } = require('../model/user');
 const { Message } = require('../model/message');
 const { AuthModel } = require('../model/authModel');
+const mongoose = require('mongoose');
 
 const userREST = {
     addUser: async (req, res) => {
@@ -31,6 +32,52 @@ const userREST = {
             return res.status(200).json('add friend successfully');
         } catch (error) {
             res.status(500).json(error);
+        }
+    },
+    deleteFriend: async (req, res) => {
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser, 'friend.id': req.body.idFriend },
+                {
+                    $set: {
+                        'friend.$.status': -1,
+                    },
+                },
+            );
+            await User.findOneAndUpdate(
+                { _id: req.body.idFriend, 'friend.id': req.body.idUser },
+                {
+                    $set: {
+                        'friend.$.status': -1,
+                    },
+                },
+            );
+
+            return res.status(200).json('delete friend successfully');
+        } catch (error) {
+            res.status.json(error);
+        }
+    },
+    acceptFriend: async (req, res) => {
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser, 'friend.id': req.body.idFriend },
+                {
+                    $set: {
+                        'friend.$.status': 1,
+                    },
+                },
+            );
+            await User.findOneAndUpdate(
+                { _id: req.body.idFriend, 'friend.id': req.body.idUser },
+                {
+                    $set: {
+                        'friend.$.status': 1,
+                    },
+                },
+            );
+        } catch (error) {
+            res.status.json(error);
         }
     },
     getUserById: async (req, res) => {
@@ -96,11 +143,33 @@ const userREST = {
     getAllFriendByStatus: async (req, res) => {
         try {
             var params = req.query;
+
             var status = params.status;
-            const user = await User.findById({ _id: req.params.id })
-                .populate('friend.id')
-                .where('friend.status')
-                .equals(status);
+
+            const user = await User.aggregate([
+                { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
+                {
+                    $lookup: {
+                        from: User.collection.name,
+                        let: { friend: '$friend' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    'friend.status': parseInt(status),
+                                },
+                            },
+                            {
+                                $project: {
+                                    fullName: 1,
+                                    'profile.urlAvartar': 1,
+                                },
+                            },
+                        ],
+                        as: 'friend',
+                    },
+                },
+            ]);
+            // .populate('friend.id');
 
             return res.status(200).json(user);
         } catch (error) {
