@@ -51,6 +51,7 @@ const authREST = {
             const lastOTP = otpDaGui[otpDaGui.length - 1];
 
             // create new auth
+            console.log(otpNhapVao);
             // userName = email
             if (otpNhapVao != lastOTP.otp) {
                 return res.status(401).json('Nhap sai otp');

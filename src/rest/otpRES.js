@@ -23,13 +23,13 @@ const otpREST = {
         // tạo mess OTP
         const message = {
             to: req.body.email,
-            from: '5442654@gmail.com',
+            from: { name: 'LCN', email: '5442654@gmail.com' },
             subject: 'Gửi mã verify',
             text: `Mã otp của bạn là ${OTPran}`,
         };
         // send OTP
         try {
-            // await sgMail.send(message);
+            await sgMail.send(message);
             return res.status(200).json('đã gửi thành công');
         } catch (error) {
             return console.log(error);
