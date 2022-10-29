@@ -15,7 +15,16 @@ const groupChatSchema = new mongoose.Schema(
             type: String,
             default: null,
         },
-
+        typeChat: {
+            type: String,
+            default: 'inbox',
+        },
+        adminChat: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
         status: Number,
         member: [
             {
