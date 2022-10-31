@@ -65,9 +65,9 @@ const authREST = {
                 password: hashPass,
             });
             const user = await newAuth.save();
-
+            console.log(req.body);
             // create new user
-            await User.create({
+            const user1 = await User.create({
                 fullName: req.body.userName,
                 email: req.body.email,
                 phoneNumber: '',
