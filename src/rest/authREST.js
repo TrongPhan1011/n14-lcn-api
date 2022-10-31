@@ -154,6 +154,31 @@ const authREST = {
 
         res.status(200).json('Đăng xuất thành công');
     },
+    getAuthByMail: async (req, res) => {
+        try {
+            const user = await AuthModel.findOne({ userName: req.query.email });
+            return res.status(200).json(user);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    updatePassword: async (req, res) => {
+        try {
+            const salt = await bscypt.genSalt(10);
+            const hashPass = await bscypt.hash(req.body.password, salt);
+            const user = await AuthModel.findOne({ userName: req.body.userName });
+            const validPassword = await bscypt.compare(req.body.password, user.password);
+            if (validPassword) {
+                return res.status(404).json('Trùng với mật khẩu cũ');
+            }
+            const user1 = await AuthModel.findOneAndUpdate({ userName: req.body.userName }, { password: hashPass });
+            console.log(user1);
+            return res.status(200).json(user1);
+        } catch (error) {
+            console.log(error);
+        }
+    },
 };
 
 module.exports = authREST;
