@@ -22,9 +22,14 @@ const messageREST = {
     uploadFile: async (req, res) => {
         try {
             var arrFile = req.files;
+
             var listFile = [];
             for (var file of arrFile) {
                 var fileName = generateFileName();
+                var fileType = file.mimetype.split('/')[0];
+                if (fileType !== 'image' || fileType !== 'video') {
+                    fileType = 'doc';
+                }
 
                 var params = {
                     Bucket: bucketName,
@@ -36,10 +41,10 @@ const messageREST = {
                 await s3Client.send(command);
 
                 var getUrl = process.env.AWS_BUCKET_PUBLIC + fileName;
-                var fileType = file.mimetype.split('/')[0];
+
                 listFile.push({
                     fileType: fileType,
-                    title: fileName,
+                    title: file.originalname,
                     path: getUrl,
                 });
             }
