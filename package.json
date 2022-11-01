@@ -10,8 +10,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.199.0",
+        "@aws-sdk/s3-request-presigner": "^3.199.0",
         "@sendgrid/mail": "^7.7.0",
-        "aws-sdk": "^2.1224.0",
         "axios": "^0.27.2",
         "bcrypt": "^5.0.1",
         "body-parser": "^1.20.0",
@@ -22,6 +23,7 @@
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.6.2",
         "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.8.0",
         "otp-generator": "^4.0.0"
     },
