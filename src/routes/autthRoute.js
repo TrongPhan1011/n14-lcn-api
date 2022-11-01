@@ -7,5 +7,6 @@ router.post('/login', authREST.login);
 router.post('/register', authREST.register);
 router.post('/refresh', authREST.requestRefreshToken);
 router.post('/logout', middleAuth.verifyToken, authREST.logOut);
-
+router.put('/update', authREST.updatePassword);
+router.get('/getauthbymail', authREST.getAuthByMail);
 module.exports = router;

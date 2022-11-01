@@ -5,7 +5,6 @@ const tokenSchema = new mongoose.Schema(
         token: {
             type: String,
             require: true,
-
             index: true,
         },
     },
