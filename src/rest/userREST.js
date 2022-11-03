@@ -157,7 +157,10 @@ const userREST = {
                         pipeline: [
                             {
                                 $match: {
-                                    'friend.status': parseInt(status),
+                                    $and: [
+                                        { 'friend.status': parseInt(status) },
+                                        { 'friend.id': mongoose.Types.ObjectId(req.params.id) },
+                                    ],
                                 },
                             },
                             {
