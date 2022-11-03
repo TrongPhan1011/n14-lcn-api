@@ -27,7 +27,7 @@ const messageREST = {
             for (var file of arrFile) {
                 var fileName = generateFileName();
                 var fileType = file.mimetype.split('/')[0];
-                if (fileType !== 'image' || fileType !== 'video') {
+                if (fileType !== 'image' && fileType !== 'video') {
                     fileType = 'doc';
                 }
 
