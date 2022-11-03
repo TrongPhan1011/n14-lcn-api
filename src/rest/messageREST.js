@@ -1,6 +1,6 @@
 const { GroupChat } = require('../model/groupChat');
 const { Message } = require('../model/message');
-const { User } = require('../model/user');
+const generateOneUrlFile = require('./getUrlFile');
 
 const messageREST = {
     addUserSeenToMess: async (req, res) => {
@@ -19,6 +19,7 @@ const messageREST = {
     addMess: async (req, res) => {
         try {
             var newMess = new Message(req.body);
+
             var saveMess = await newMess.save();
 
             var idChat = newMess.idChat;
@@ -47,6 +48,7 @@ const messageREST = {
     getMessageById: async (req, res) => {
         try {
             var message = await Message.findById(req.params.id).populate('authorID');
+
             res.status(200).json(message);
         } catch (error) {
             res.status(500).json(error);

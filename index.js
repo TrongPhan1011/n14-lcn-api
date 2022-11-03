@@ -11,6 +11,7 @@ const groupChat = require('./src/routes/groupChatRoute');
 const messageRoute = require('./src/routes/messageRoute');
 const authRoute = require('./src/routes/autthRoute');
 const otpRoute = require('./src/routes/otpRoute');
+const fileRoute = require('./src/routes/fileRoute');
 
 const app = express();
 
@@ -22,7 +23,13 @@ mongoose.connect(process.env.DATABASE_URL, () => {
 });
 
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(cors({ credentials: true, origin: true }));
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+        origin: true,
+    }),
+);
 app.use(morgan('common'));
 app.use(cookieParser());
 
@@ -31,6 +38,7 @@ app.use('/api/chat', groupChat);
 app.use('/api/message', messageRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/otp', otpRoute);
+app.use('/api/file', fileRoute);
 
 app.listen(8080, () => {
     console.log('server is running...');

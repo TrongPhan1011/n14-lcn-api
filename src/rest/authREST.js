@@ -23,7 +23,7 @@ const authREST = {
             },
             process.env.JWT_ACCESS_TOKEN,
             {
-                expiresIn: '15d',
+                expiresIn: '30d',
             },
         );
         return accessToken;
@@ -117,6 +117,7 @@ const authREST = {
         }
     },
     requestRefreshToken: async (req, res) => {
+        console.log(req.cookies);
         try {
             const refreshToken = req.cookies.refreshToken;
             if (!refreshToken) res.status(401).json('Bạn chưa đăng nhập!');

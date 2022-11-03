@@ -1,5 +1,5 @@
 const { User } = require('../model/user');
-const { Message } = require('../model/message');
+
 const { AuthModel } = require('../model/authModel');
 const mongoose = require('mongoose');
 
@@ -148,7 +148,7 @@ const userREST = {
 
             var status = params.status;
 
-            const user = await User.aggregate([
+            const arrUser = await User.aggregate([
                 { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
                 {
                     $lookup: {
@@ -174,9 +174,8 @@ const userREST = {
                     },
                 },
             ]);
-            // .populate('friend.id');
 
-            return res.status(200).json(user);
+            return res.status(200).json(arrUser);
         } catch (error) {
             console.log(error);
         }
