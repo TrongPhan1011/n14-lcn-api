@@ -21,10 +21,22 @@ const userSchema = new mongoose.Schema(
         statusOnline: Boolean,
         status: Number,
         profile: {
-            urlAvartar: String,
-            urlCoverPhoto: String,
-            education: String,
-            qrUrl: String,
+            urlAvartar: {
+                type: String,
+                default: undefined,
+            },
+            urlCoverPhoto: {
+                type: String,
+                default: undefined,
+            },
+            education: {
+                type: String,
+                default: undefined,
+            },
+            qrUrl: {
+                type: String,
+                default: undefined,
+            },
             updateAt: String,
             status: Number,
             _id: false,
