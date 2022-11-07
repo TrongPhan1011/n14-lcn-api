@@ -66,6 +66,7 @@ const userREST = {
         try {
             const idChat = req.params.id;
             const arrMember = req.body;
+
             const GROUP_PUBLIC = 1;
 
             const chat = await GroupChat.findById(idChat);
@@ -79,7 +80,10 @@ const userREST = {
                         await member.updateOne({ $push: { listGroup: chat._id } });
                     }
                     chat.member = [...chat.member, ...arrMember];
-                } else await chat.updateOne({ $push: { memberWating: req.body } });
+                } else {
+                    await chat.updateOne({ $push: { memberWaiting: req.body } });
+                    chat.memberWaiting = [...chat.memberWaiting, ...arrMember];
+                }
 
                 return res.status(200).json(chat);
             }
@@ -88,6 +92,35 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    requestMemberChat: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+            const arrMember = req.body;
+            const statusRequest = req.query.action;
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                if (statusRequest === 'accept') {
+                    await chat.updateOne({ $push: { member: req.body }, $pullAll: { memberWaiting: req.body } });
+                    for (var idUser of arrMember) {
+                        var member = User.findById(idUser);
+
+                        await member.updateOne({ $push: { listGroup: chat._id } });
+                    }
+                } else {
+                    await chat.updateOne({ $pullAll: { memberWaiting: req.body } });
+                }
+                const newChat = await GroupChat.findById(idChat);
+
+                return res.status(200).json(newChat);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
     addAdminChat: async (req, res) => {
         try {
             const idChat = req.params.id;
@@ -112,16 +145,22 @@ const userREST = {
             const idChat = req.params.id;
 
             const status = req.query.status;
-            console.log(status);
 
             const chat = await GroupChat.findById(idChat);
 
             if (!!chat) {
-                await chat.updateOne({ $set: { status: status } });
+                var memberWaiting = chat.memberWaiting;
+                await chat.updateOne({ $set: { status: status, memberWaiting: [] }, $push: { member: memberWaiting } });
 
-                chat.status = status;
+                for (var idUser of memberWaiting) {
+                    var member = User.findById(idUser);
 
-                return res.status(200).json(chat);
+                    await member.updateOne({ $push: { listGroup: chat._id } });
+                }
+
+                const newChat = await GroupChat.findById(idChat);
+
+                return res.status(200).json(newChat);
             }
             return res.status(404).json('Không tìm thấy group chat');
         } catch (error) {
