@@ -32,6 +32,18 @@ const groupChatSchema = new mongoose.Schema(
                 ref: 'User',
             },
         ],
+        blockMember: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
+        memberWaiting: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ],
         message: [
             {
                 type: mongoose.Schema.ObjectId,

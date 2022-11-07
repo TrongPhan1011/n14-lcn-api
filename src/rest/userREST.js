@@ -126,6 +126,7 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+
     leaveChat: async (req, res) => {
         try {
             await User.findOneAndUpdate(

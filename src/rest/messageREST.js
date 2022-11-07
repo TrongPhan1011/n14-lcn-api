@@ -68,6 +68,22 @@ const messageREST = {
             res.status(500).json(error);
         }
     },
+    getMessageFileByIdChat: async (req, res) => {
+        try {
+            var limit = req.query.limit;
+            var skip = req.query.skip;
+
+            var listMess = await Message.find({ idChat: req.query.idchat, title: '' })
+                .sort({ createdAt: -1 })
+                .limit(limit)
+                .skip(limit * skip)
+                .populate('authorID');
+
+            res.status(200).json(listMess.reverse());
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = messageREST;
