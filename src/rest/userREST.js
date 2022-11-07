@@ -35,22 +35,17 @@ const userREST = {
         }
     },
     deleteFriend: async (req, res) => {
+        console.log(req.body.idUser);
         try {
             await User.findOneAndUpdate(
-                { _id: req.body.idUser, 'friend.id': req.body.idFriend },
-                {
-                    $set: {
-                        'friend.$.status': -1,
-                    },
-                },
+                { _id: req.body.idUser },
+                { $pull: { friend: { id: req.body.idFriend } } },
+                { safe: true, multi: false },
             );
             await User.findOneAndUpdate(
-                { _id: req.body.idFriend, 'friend.id': req.body.idUser },
-                {
-                    $set: {
-                        'friend.$.status': -1,
-                    },
-                },
+                { _id: req.body.idFriend },
+                { $pull: { friend: { id: req.body.idUser } } },
+                { safe: true, multi: false },
             );
 
             return res.status(200).json('delete friend successfully');
@@ -76,6 +71,7 @@ const userREST = {
                     },
                 },
             );
+            return res.status.json('Chấp nhận kết bạn thành công');
         } catch (error) {
             res.status.json(error);
         }
