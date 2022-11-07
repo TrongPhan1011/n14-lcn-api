@@ -16,7 +16,7 @@ const userREST = {
 
             return res.status(200).json(saveChat);
         } catch (error) {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     },
     getAllChatByUserId: async (req, res) => {
@@ -27,7 +27,7 @@ const userREST = {
 
             return res.status(200).json(listGroupChat);
         } catch (error) {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     },
     getChatById: async (req, res) => {
@@ -36,6 +36,96 @@ const userREST = {
 
             return res.status(200).json(chat);
         } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getMemberOfChat: async (req, res) => {
+        try {
+            const idChat = req.query.idChat;
+            const arrMember = await User.find(
+                { status: 1, listGroup: { $in: [idChat] } },
+                { _id: 1, fullName: 1, status: 1, profile: 1 },
+            );
+            return res.status(200).json(arrMember);
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
+    getMemberWaiting: async (req, res) => {
+        try {
+            const idChat = req.query.idChat;
+            const chat = await GroupChat.findById(idChat).populate('memberWaiting');
+            const arrMember = chat.memberWaiting;
+            if (!!chat && !!arrMember) return res.status(200).json(arrMember);
+            else return res.status(200).json([]);
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
+    addMember: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+            const arrMember = req.body;
+            const GROUP_PUBLIC = 1;
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                if (chat.status === GROUP_PUBLIC) {
+                    await chat.updateOne({ $push: { member: req.body } });
+                    for (var idUser of arrMember) {
+                        var member = User.findById(idUser);
+
+                        await member.updateOne({ $push: { listGroup: chat._id } });
+                    }
+                    chat.member = [...chat.member, ...arrMember];
+                } else await chat.updateOne({ $push: { memberWating: req.body } });
+
+                return res.status(200).json(chat);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    addAdminChat: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+            const arrAdmin = req.body;
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                await chat.updateOne({ $push: { adminChat: req.body } });
+
+                chat.adminChat = [...chat.adminChat, ...arrAdmin];
+
+                return res.status(200).json(chat);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    changeStatusChat: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+
+            const status = req.query.status;
+            console.log(status);
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                await chat.updateOne({ $set: { status: status } });
+
+                chat.status = status;
+
+                return res.status(200).json(chat);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     },
