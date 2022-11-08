@@ -50,7 +50,7 @@ const userREST = {
 
             return res.status(200).json('delete friend successfully');
         } catch (error) {
-            res.status.json(error);
+            res.status(500).json(error);
         }
     },
     acceptFriend: async (req, res) => {
@@ -71,9 +71,9 @@ const userREST = {
                     },
                 },
             );
-            return res.status.json('Chấp nhận kết bạn thành công');
+            return res.status(200).json('Chấp nhận kết bạn thành công');
         } catch (error) {
-            res.status.json(error);
+            res.status(500).json(error);
         }
     },
     getUserById: async (req, res) => {

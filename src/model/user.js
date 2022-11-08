@@ -23,19 +23,19 @@ const userSchema = new mongoose.Schema(
         profile: {
             urlAvartar: {
                 type: String,
-                default: undefined,
+                default: '',
             },
             urlCoverPhoto: {
                 type: String,
-                default: undefined,
+                default: '',
             },
             education: {
                 type: String,
-                default: undefined,
+                default: '',
             },
             qrUrl: {
                 type: String,
-                default: undefined,
+                default: '',
             },
             updateAt: String,
             status: Number,
