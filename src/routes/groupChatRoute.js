@@ -14,5 +14,6 @@ router.put('/member/:id', middleAuth.verifyToken, chatREST.addMember);
 router.put('/admin/:id', middleAuth.verifyToken, chatREST.addAdminChat);
 router.put('/status/:id', middleAuth.verifyToken, chatREST.changeStatusChat);
 router.put('/requestMember/:id', middleAuth.verifyToken, chatREST.requestMemberChat);
+router.put('/removeMember/:id', middleAuth.verifyToken, chatREST.removeMemberChat);
 
 module.exports = router;
