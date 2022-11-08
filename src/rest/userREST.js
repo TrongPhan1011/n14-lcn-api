@@ -164,6 +164,7 @@ const userREST = {
                                 $project: {
                                     fullName: 1,
                                     'profile.urlAvartar': 1,
+                                    listGroup: 1,
                                 },
                             },
                         ],
