@@ -25,7 +25,10 @@ const groupChatSchema = new mongoose.Schema(
                 ref: 'User',
             },
         ],
-        status: Number,
+        status: {
+            type: Number,
+            default: 1,
+        },
         member: [
             {
                 type: mongoose.Schema.Types.ObjectId,
