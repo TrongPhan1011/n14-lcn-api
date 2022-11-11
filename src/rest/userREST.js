@@ -127,18 +127,6 @@ const userREST = {
         }
     },
 
-    leaveChat: async (req, res) => {
-        try {
-            await User.findOneAndUpdate(
-                { _id: req.body.idUser },
-                { $pull: { listGroup: req.body.idChat } },
-                { safe: true, multi: false },
-            );
-            return res.status(200).json('leave chat successfully');
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    },
     getAllFriendByStatus: async (req, res) => {
         try {
             var params = req.query;
