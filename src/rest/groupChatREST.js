@@ -146,6 +146,33 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    removeChat: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+            const userId = req.query.idCurUser;
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                // status = -1 --> group da bi xoa
+                await chat.updateOne({ $set: { status: -1 } });
+                var arrMember = chat.member;
+                for (var idUser of arrMember) {
+                    var member = User.findById(idUser);
+
+                    await member.updateOne({ $pull: { listGroup: chat._id } });
+                }
+
+                const currUser = await User.findById(userId);
+                console.log(userId);
+
+                return res.status(200).json(currUser);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 
     addAdminChat: async (req, res) => {
         try {
@@ -212,6 +239,29 @@ const userREST = {
                 const newChat = await GroupChat.findById(idChat);
 
                 return res.status(200).json(newChat);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
+    },
+    changeNameChat: async (req, res) => {
+        try {
+            const idChat = req.params.id;
+
+            const newName = req.query.name;
+            const idUser = req.query.idUser;
+
+            const chat = await GroupChat.findById(idChat);
+
+            console.log(chat);
+            if (!!chat) {
+                await chat.updateOne({ $set: { name: newName } });
+
+                const newUser = await User.findById(idUser);
+
+                return res.status(200).json(newUser);
             }
             return res.status(404).json('Không tìm thấy group chat');
         } catch (error) {

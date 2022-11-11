@@ -32,15 +32,33 @@ const messageREST = {
         }
     },
 
-    deleteMess: async (req, res) => {
+    deleteMessWithEveryone: async (req, res) => {
         try {
+            // status: -1: xoá tất cả với mọi người
+
+            var idGroup = req.params.id;
+            var idMess = req.params.idMess;
+            await Message.findOneAndUpdate({ _id: idMess }, { $set: { status: -1 } }, { safe: true, multi: false });
             await GroupChat.findOneAndUpdate(
-                { _id: req.params.id },
-                { $pull: { message: req.params.idMess } },
+                { _id: idGroup },
+                { $pull: { message: idMess } },
                 { safe: true, multi: false },
             );
 
-            return res.status(200).json('chat');
+            // return 1 : xoa thanh cong
+            return res.status(200).json(1);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    deleteMessWithUser: async (req, res) => {
+        try {
+            // status: 0: xoá chỉ mình user
+
+            var idMess = req.params.idMess;
+            await Message.findOneAndUpdate({ _id: idMess }, { $set: { status: 0 } }, { safe: true, multi: false });
+
+            return res.status(200).json(1);
         } catch (error) {
             res.status(500).json(error);
         }
