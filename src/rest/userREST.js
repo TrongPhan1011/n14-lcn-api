@@ -187,6 +187,16 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    updateAvatar: async (req, res) => {
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser },
+                { $set: { profile: { urlAvartar: req.body.avatar } } },
+            );
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
 };
 
 module.exports = userREST;
