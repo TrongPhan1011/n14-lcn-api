@@ -133,6 +133,8 @@ const userREST = {
 
             var status = params.status;
 
+            // var arrUser = await User.find({ _id: req.params.id, 'friend.status': 1 }).populate('friend');
+
             const arrUser = await User.aggregate([
                 { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
                 {
@@ -142,10 +144,11 @@ const userREST = {
                         pipeline: [
                             {
                                 $match: {
-                                    $and: [
-                                        { 'friend.status': parseInt(status) },
-                                        { 'friend.id': mongoose.Types.ObjectId(req.params.id) },
-                                    ],
+                                    // $and: [
+                                    //     { 'friend.status': parseInt(status) },
+                                    //     { 'friend.id': mongoose.Types.ObjectId(req.params.id) },
+                                    // ],
+                                    friend: { id: mongoose.Types.ObjectId(req.params.id), status: parseInt(status) },
                                 },
                             },
                             {
@@ -153,6 +156,8 @@ const userREST = {
                                     fullName: 1,
                                     'profile.urlAvartar': 1,
                                     listGroup: 1,
+                                    'friend.status': 1,
+                                    'friend.id': 1,
                                 },
                             },
                         ],
