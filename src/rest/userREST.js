@@ -2,6 +2,7 @@ const { User } = require('../model/user');
 
 const { AuthModel } = require('../model/authModel');
 const mongoose = require('mongoose');
+const { GroupChat } = require('../model/groupChat');
 
 const userREST = {
     addUser: async (req, res) => {
@@ -116,14 +117,26 @@ const userREST = {
 
             var valueSearch = params.q;
             var limitResult = params._limit;
+            var idUser = params.idUser;
 
-            const listUser = await User.find({ $text: { $search: valueSearch } }).limit(limitResult);
+            var listUser = await User.find({ $text: { $search: valueSearch } }).limit(limitResult);
+            var listGroup = await GroupChat.find({
+                $text: { $search: valueSearch },
+                typeChat: 'group',
+                status: 1,
+            }).limit(limitResult);
+            listGroup = listGroup.filter((group) => {
+                // chay some de check object trong mang ban be
+                return group.member.includes(idUser);
+            });
 
-            // const user = await User.findOne({ phoneNumber: req.params.phoneNumber });
-
-            return res.status(200).json(listUser);
+            const searchResult = {
+                users: listUser,
+                groups: listGroup,
+            };
+            return res.status(200).json(searchResult);
         } catch (error) {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     },
 

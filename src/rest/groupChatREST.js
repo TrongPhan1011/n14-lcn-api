@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const { GroupChat } = require('../model/groupChat');
 const { User } = require('../model/user');
 
@@ -35,6 +36,21 @@ const userREST = {
     getChatById: async (req, res) => {
         try {
             const chat = await GroupChat.findById(req.params.id);
+
+            return res.status(200).json(chat);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    getInboxByIdFriend: async (req, res) => {
+        try {
+            var idUser = req.query.idUser;
+            var idFriend = req.query.idFriend;
+
+            const chat = await GroupChat.findOne({
+                typeChat: 'inbox',
+                $or: [{ member: [idUser, idFriend] }, { member: [idFriend, idUser] }],
+            });
 
             return res.status(200).json(chat);
         } catch (error) {
