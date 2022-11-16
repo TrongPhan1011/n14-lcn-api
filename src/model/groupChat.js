@@ -63,6 +63,7 @@ groupChatSchema.set('toJSON', {
         delete ret._id;
     },
 });
+groupChatSchema.index({ name: 'text' });
 
 var GroupChat = mongoose.model('GroupChat', groupChatSchema);
 

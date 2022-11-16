@@ -7,6 +7,7 @@ router.post('/', middleAuth.verifyToken, chatREST.addChat);
 
 router.get('/user_id', middleAuth.verifyToken, chatREST.getAllChatByUserId);
 router.get('/id/:id', middleAuth.verifyToken, chatREST.getChatById);
+router.get('/idInbox', middleAuth.verifyToken, chatREST.getInboxByIdFriend);
 router.get('/member', middleAuth.verifyToken, chatREST.getMemberOfChat);
 router.get('/memberWaiting', middleAuth.verifyToken, chatREST.getMemberWaiting);
 
