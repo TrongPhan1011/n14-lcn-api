@@ -184,8 +184,48 @@ const userREST = {
         try {
             await User.findOneAndUpdate(
                 { _id: req.body.idUser },
-                { $set: { profile: { urlAvartar: req.body.avatar } } },
+                {
+                    $set: {
+                        'profile.urlAvartar': req.body.avatar,
+                    },
+                },
             );
+            res.status(200).json('update thành công');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    updateBanner: async (req, res) => {
+        try {
+            console.log(req.body.banner);
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser },
+                {
+                    $set: {
+                        'profile.urlCoverPhoto': req.body.banner,
+                    },
+                },
+            );
+            return res.status(200).json('update thành công');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    updateUserProfile: async (req, res) => {
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser },
+                {
+                    $set: {
+                        'profile.education': req.body.education,
+                        fullName: req.body.fullName,
+                        gender: req.body.gender,
+                        birthday: req.body.birthday,
+                        phoneNumber: req.body.phoneNumber,
+                    },
+                },
+            );
+            return res.status(200).json('update thành công');
         } catch (error) {
             res.status(500).json(error);
         }

@@ -9,4 +9,5 @@ router.post('/refresh', authREST.requestRefreshToken);
 router.post('/logout', middleAuth.verifyToken, authREST.logOut);
 router.put('/update', authREST.updatePassword);
 router.get('/getauthbymail', authREST.getAuthByMail);
+router.get('/checkpass', authREST.checkPassword);
 module.exports = router;

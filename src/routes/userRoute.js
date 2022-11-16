@@ -16,5 +16,7 @@ router.get('/textsearch', middleAuth.verifyToken, userREST.getUserByTextSearch);
 
 router.get('/friend/:id', middleAuth.verifyToken, userREST.getAllFriendByStatus);
 router.put('/id/:id', middleAuth.verifyToken, userREST.updateUser);
+router.put('/profile/', middleAuth.verifyToken, userREST.updateUserProfile);
 router.put('/profile/avatar', middleAuth.verifyToken, userREST.updateAvatar);
+router.put('/profile/banner', middleAuth.verifyToken, userREST.updateBanner);
 module.exports = router;
