@@ -72,6 +72,7 @@ const userREST = {
                     },
                 },
             );
+
             return res.status(200).json('Chấp nhận kết bạn thành công');
         } catch (error) {
             res.status(500).json(error);
@@ -146,8 +147,6 @@ const userREST = {
 
             var status = params.status;
 
-            // var arrUser = await User.find({ _id: req.params.id, 'friend.status': 1 }).populate('friend');
-
             const arrUser = await User.aggregate([
                 { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
                 {
@@ -157,10 +156,6 @@ const userREST = {
                         pipeline: [
                             {
                                 $match: {
-                                    // $and: [
-                                    //     { 'friend.status': parseInt(status) },
-                                    //     { 'friend.id': mongoose.Types.ObjectId(req.params.id) },
-                                    // ],
                                     friend: { id: mongoose.Types.ObjectId(req.params.id), status: parseInt(status) },
                                 },
                             },
@@ -197,8 +192,48 @@ const userREST = {
         try {
             await User.findOneAndUpdate(
                 { _id: req.body.idUser },
-                { $set: { profile: { urlAvartar: req.body.avatar } } },
+                {
+                    $set: {
+                        'profile.urlAvartar': req.body.avatar,
+                    },
+                },
             );
+            res.status(200).json('update thành công');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    updateBanner: async (req, res) => {
+        try {
+            console.log(req.body.banner);
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser },
+                {
+                    $set: {
+                        'profile.urlCoverPhoto': req.body.banner,
+                    },
+                },
+            );
+            return res.status(200).json('update thành công');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+    updateUserProfile: async (req, res) => {
+        console.log(req.body);
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser },
+                {
+                    $set: {
+                        'profile.education': req.body.education,
+                        fullName: req.body.fullName,
+                        gender: req.body.gender,
+                        birthday: req.body.birthday,
+                    },
+                },
+            );
+            return res.status(200).json('update thành công');
         } catch (error) {
             res.status(500).json(error);
         }

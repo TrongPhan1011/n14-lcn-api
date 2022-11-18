@@ -156,6 +156,7 @@ const authREST = {
         res.status(200).json('Đăng xuất thành công');
     },
     getAuthByMail: async (req, res) => {
+        console.log(req);
         try {
             const user = await AuthModel.findOne({ userName: req.query.email });
             return res.status(200).json(user);
@@ -174,8 +175,20 @@ const authREST = {
                 return res.status(404).json('Trùng với mật khẩu cũ');
             }
             const user1 = await AuthModel.findOneAndUpdate({ userName: req.body.userName }, { password: hashPass });
-            console.log(user1);
+
             return res.status(200).json(user1);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    checkPassword: async (req, res) => {
+        try {
+            const user = await AuthModel.findOne({ userName: req.query.userName });
+            const validPassword = await bscypt.compare(req.query.password, user.password);
+            if (validPassword) {
+                return res.status(402).json('Trùng với mật khẩu cũ');
+            }
+            return res.status(200).json('Không trùng với mật khẩu cũ');
         } catch (error) {
             console.log(error);
         }

@@ -10,6 +10,21 @@ const userREST = {
             var idNewChat = newChat.id;
             var arrNameMember = [];
 
+            if (newChat.typeChat === 'inbox') {
+                const chatInboxExist = await GroupChat.findOne({
+                    typeChat: 'inbox',
+                    $or: [
+                        { member: [newChat.member[0], newChat.member[1]] },
+                        { member: [newChat.member[1], newChat.member[0]] },
+                    ],
+                });
+                // inbox da ton tai
+                if (!!chatInboxExist) {
+                    return res.status(200).json(null);
+                }
+            }
+
+            // them group chat vao user
             for (var idUser of newChat.member) {
                 var member = await User.findById(idUser);
                 var arrName = member.fullName.split(' ');
@@ -17,14 +32,19 @@ const userREST = {
 
                 await member.updateOne({ $push: { listGroup: idNewChat } });
             }
-            var newNameChat = arrNameMember[0] + ', ' + arrNameMember[1] + ', ' + arrNameMember[2];
 
-            if (arrNameMember.length > 4) {
-                newNameChat += ' và ' + (arrNameMember.length - 3) + ' người khác';
+            // tao ten tu dong trong truong hop day la group chat
+            if (newChat.typeChat === 'inbox') {
+                var newNameChat = arrNameMember[0] + ', ' + arrNameMember[1] + ', ' + arrNameMember[2];
+                if (arrNameMember.length > 4) {
+                    newNameChat += ' và ' + (arrNameMember.length - 3) + ' người khác';
+                }
+
+                newChat.name = newNameChat;
             }
+
             var newUserLogin = await User.findById(newChat.userCreate);
 
-            newChat.name = newNameChat;
             const saveChat = await newChat.save();
 
             return res.status(200).json({ newChat: saveChat, userLogin: newUserLogin });
@@ -68,6 +88,7 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+
     getMemberOfChat: async (req, res) => {
         try {
             const idChat = req.query.idChat;
