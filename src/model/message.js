@@ -54,7 +54,10 @@ const messageSchema = new mongoose.Schema(
                 _id: false,
             },
         ],
-        type: String,
+        type_mess: {
+            type: String,
+            default: '',
+        },
         status: Number,
         file: [fileSchema],
     },

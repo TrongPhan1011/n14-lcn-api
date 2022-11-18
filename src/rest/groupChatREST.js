@@ -7,18 +7,29 @@ const userREST = {
         try {
             const newChat = new GroupChat(req.body);
 
-            const saveChat = await newChat.save();
-            var idNewChat = saveChat.id;
+            var idNewChat = newChat.id;
+            var arrNameMember = [];
 
-            for (var idUser of saveChat.member) {
-                var member = User.findById(idUser);
+            for (var idUser of newChat.member) {
+                var member = await User.findById(idUser);
+                var arrName = member.fullName.split(' ');
+                arrNameMember.push(arrName[arrName.length - 1]);
 
                 await member.updateOne({ $push: { listGroup: idNewChat } });
             }
+            var newNameChat = arrNameMember[0] + ', ' + arrNameMember[1] + ', ' + arrNameMember[2];
+
+            if (arrNameMember.length > 4) {
+                newNameChat += ' và ' + (arrNameMember.length - 3) + ' người khác';
+            }
             var newUserLogin = await User.findById(newChat.userCreate);
+
+            newChat.name = newNameChat;
+            const saveChat = await newChat.save();
 
             return res.status(200).json({ newChat: saveChat, userLogin: newUserLogin });
         } catch (error) {
+            console.log(error);
             return res.status(500).json(error);
         }
     },
