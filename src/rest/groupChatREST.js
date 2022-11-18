@@ -19,7 +19,7 @@ const userREST = {
 
             return res.status(200).json({ newChat: saveChat, userLogin: newUserLogin });
         } catch (error) {
-            return res.status(500).json(error);
+            return console.log(error);
         }
     },
     getAllChatByUserId: async (req, res) => {
@@ -57,6 +57,7 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+
     getMemberOfChat: async (req, res) => {
         try {
             const idChat = req.query.idChat;

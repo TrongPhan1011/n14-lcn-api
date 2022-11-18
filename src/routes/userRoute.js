@@ -13,8 +13,8 @@ router.get('/id/:id', middleAuth.verifyToken, userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', middleAuth.verifyToken, userREST.getUserByPhoneNumber);
 router.get('/account/:accountId', userREST.getUserByAccountId);
 router.get('/textsearch', middleAuth.verifyToken, userREST.getUserByTextSearch);
-
 router.get('/friend/:id', middleAuth.verifyToken, userREST.getAllFriendByStatus);
+
 router.put('/id/:id', middleAuth.verifyToken, userREST.updateUser);
 router.put('/profile/', middleAuth.verifyToken, userREST.updateUserProfile);
 router.put('/profile/avatar', middleAuth.verifyToken, userREST.updateAvatar);
