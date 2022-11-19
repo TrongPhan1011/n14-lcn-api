@@ -1,6 +1,24 @@
-const { default: mongoose } = require('mongoose');
 const { GroupChat } = require('../model/groupChat');
 const { User } = require('../model/user');
+const { Message } = require('../model/message');
+const { S3 } = require('@aws-sdk/client-s3');
+
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const bucketName = process.env.AWS_BUCKET_NAME;
+const region = process.env.AWS_BUCKET_REGION;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+const s3 = new S3({
+    region,
+    credentials: {
+        accessKeyId,
+        secretAccessKey,
+    },
+});
 
 const userREST = {
     addChat: async (req, res) => {
@@ -203,21 +221,48 @@ const userREST = {
 
             if (!!chat) {
                 // status = -1 --> group da bi xoa
-                await chat.updateOne({ $set: { status: -1 } });
+
+                for (let idMess of chat.message) {
+                    const message = await Message.findById(idMess);
+                    if (!!message) {
+                        var file = message.file;
+                        if (!!file) {
+                            var length = file.length;
+                            for (let i = 0; i < length; i++) {
+                                //console.log(file[i].key);
+                                var keyFile = file[i].path.split(
+                                    'https://n14-lcn-bucket.s3.ap-southeast-1.amazonaws.com/',
+                                )[1];
+                                console.log(keyFile);
+                                var params = {
+                                    Bucket: bucketName,
+                                    //Key: file[i].key,
+                                    Key: keyFile,
+                                };
+                                s3.deleteObject(params, function (err, data) {
+                                    if (err) console.log(err, err.stack);
+                                    else console.log('delete', data);
+                                });
+                            }
+                        }
+                        await message.remove();
+                    }
+                }
                 var arrMember = chat.member;
                 for (var idUser of arrMember) {
                     var member = User.findById(idUser);
 
                     await member.updateOne({ $pull: { listGroup: chat._id } });
                 }
+                await chat.remove();
 
                 const currUser = await User.findById(userId);
-                console.log(userId);
 
                 return res.status(200).json(currUser);
             }
             return res.status(404).json('Không tìm thấy group chat');
         } catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     },
