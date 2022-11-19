@@ -52,7 +52,7 @@ const userREST = {
             }
 
             // tao ten tu dong trong truong hop day la group chat
-            if (newChat.typeChat === 'inbox') {
+            if (newChat.typeChat !== 'inbox') {
                 var newNameChat = arrNameMember[0] + ', ' + arrNameMember[1] + ', ' + arrNameMember[2];
                 if (arrNameMember.length > 4) {
                     newNameChat += ' và ' + (arrNameMember.length - 3) + ' người khác';
