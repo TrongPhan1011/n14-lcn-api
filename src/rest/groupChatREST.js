@@ -82,6 +82,18 @@ const userREST = {
             return res.status(500).json(error);
         }
     },
+    getAllFileOfChat: async (req, res) => {
+        try {
+            const chat = await GroupChat.findById(req.params.id).populate('message');
+
+            var arrMessFile = chat.message.filter((mess) => mess.file.length > 0);
+
+            return res.status(200).json(arrMessFile);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json(error);
+        }
+    },
     getChatById: async (req, res) => {
         try {
             const chat = await GroupChat.findById(req.params.id);
