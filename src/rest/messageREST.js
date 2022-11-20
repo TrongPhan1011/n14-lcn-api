@@ -55,8 +55,8 @@ const messageREST = {
         try {
             // status: -1: xoá tất cả với mọi người
 
-            // var idGroup = req.params.id;
-            // var idMess = req.params.idMess;
+            var idGroup = req.params.id;
+            var idMess = req.params.idMess;
             // await Message.findOneAndUpdate({ _id: idMess }, { $set: { status: -1 } }, { safe: true, multi: false });
             // await GroupChat.findOneAndUpdate(
             //     { _id: idGroup },
@@ -64,8 +64,8 @@ const messageREST = {
             //     { safe: true, multi: false },
             // );
 
-            var idGroup = req.body.id;
-            var idMess = req.body.idMess;
+            // var idGroup = req.body.id;
+            // var idMess = req.body.idMess;
             const message = await Message.findById(idMess);
             const chat = await GroupChat.findById(idGroup);
 
@@ -90,7 +90,8 @@ const messageREST = {
                 }
                 await chat.updateOne({ $pull: { message: idMess } });
                 await message.remove();
-                return res.status(200).json(1);
+                const newChat = await GroupChat.findById(idGroup);
+                return res.status(200).json(newChat);
             }
 
             //return 1 : xoa thanh cong
