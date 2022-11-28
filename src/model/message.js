@@ -27,7 +27,14 @@ const messageSchema = new mongoose.Schema(
         },
         title: String,
 
-        replyMessage: mongoose.Schema.Types.ObjectId,
+        replyMessage: {
+            id: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'Message',
+            },
+            title: String,
+            file: fileSchema,
+        },
         seen: [
             {
                 id: {
@@ -56,7 +63,7 @@ const messageSchema = new mongoose.Schema(
         ],
         type_mess: {
             type: String,
-            default: '',
+            default: 'text',
         },
         status: Number,
         file: [fileSchema],

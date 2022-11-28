@@ -52,7 +52,7 @@ const userREST = {
             }
 
             // tao ten tu dong trong truong hop day la group chat
-            if (newChat.typeChat === 'inbox') {
+            if (newChat.typeChat !== 'inbox') {
                 var newNameChat = arrNameMember[0] + ', ' + arrNameMember[1] + ', ' + arrNameMember[2];
                 if (arrNameMember.length > 4) {
                     newNameChat += ' và ' + (arrNameMember.length - 3) + ' người khác';
@@ -79,6 +79,18 @@ const userREST = {
 
             return res.status(200).json(listGroupChat);
         } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
+    getAllFileOfChat: async (req, res) => {
+        try {
+            const chat = await GroupChat.findById(req.params.id).populate('message');
+
+            var arrMessFile = chat.message.filter((mess) => mess.file.length > 0);
+
+            return res.status(200).json(arrMessFile);
+        } catch (error) {
+            console.log(error);
             return res.status(500).json(error);
         }
     },

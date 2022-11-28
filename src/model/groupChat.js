@@ -5,6 +5,7 @@ const groupChatSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            default: ' ',
         },
         userCreate: {
             type: mongoose.Schema.ObjectId,
