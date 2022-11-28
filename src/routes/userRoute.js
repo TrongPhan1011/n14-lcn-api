@@ -8,6 +8,7 @@ router.post('/', userREST.addUser);
 router.put('/addfriend/', middleAuth.verifyToken, userREST.addFriend);
 router.put('/deletefriend/', middleAuth.verifyToken, userREST.deleteFriend);
 router.put('/acceptfriend/', middleAuth.verifyToken, userREST.acceptFriend);
+router.put('/blockfriend/', middleAuth.verifyToken, userREST.blockFriend);
 
 router.get('/id/:id', middleAuth.verifyToken, userREST.getUserById);
 router.get('/phonenumber/:phoneNumber', middleAuth.verifyToken, userREST.getUserByPhoneNumber);

@@ -1,5 +1,6 @@
 const { OTP } = require('../model/otp');
 const { User } = require('../model/user');
+const { Ban } = require('../model/ban');
 const OtpGenerator = require('otp-generator');
 const sgMail = require('@sendgrid/mail');
 const API_KEY = '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';
@@ -28,6 +29,24 @@ const otpREST = {
             return res.status(200).json('đã gửi thành công');
         } catch (error) {
             return console.log(error);
+        }
+    },
+    banAccount: async (req, res) => {
+        try {
+            console.log(req.body.userName);
+            const ban = await Ban.create({ email: req.body.userName });
+            return res.status(200).json(ban);
+        } catch (error) {
+            return console.log(error);
+        }
+    },
+    findBanAccount: async (req, res) => {
+        try {
+            console.log(req.params.email);
+            const ban = await Ban.findOne({ email: req.params.email });
+            return res.status(200).json(ban);
+        } catch (error) {
+            console.log(error);
         }
     },
     verifyOtp: async (req, res) => {
