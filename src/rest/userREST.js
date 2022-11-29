@@ -78,6 +78,30 @@ const userREST = {
             res.status(500).json(error);
         }
     },
+    blockFriend: async (req, res) => {
+        try {
+            await User.findOneAndUpdate(
+                { _id: req.body.idUser, 'friend.id': req.body.idFriend },
+                {
+                    $set: {
+                        'friend.$.status': -1,
+                    },
+                },
+            );
+            await User.findOneAndUpdate(
+                { _id: req.body.idFriend, 'friend.id': req.body.idUser },
+                {
+                    $set: {
+                        'friend.$.status': -2,
+                    },
+                },
+            );
+
+            return res.status(200).json('Chặn thành công');
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
     getUserById: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
