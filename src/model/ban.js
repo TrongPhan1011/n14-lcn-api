@@ -3,7 +3,7 @@ const banSchema = new mongoose.Schema(
     {
         email: String,
 
-        time: { type: Date, default: Date.now, index: { expires: 180 } },
+        time: { type: Date, default: Date.now, index: { expires: 3600 } },
     },
     {
         collection: 'ban',

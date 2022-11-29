@@ -3,7 +3,7 @@ const otpSchema = new mongoose.Schema(
     {
         email: String,
         otp: String,
-        time: { type: Date, default: Date.now, index: { expires: 180 } },
+        time: { type: Date, default: Date.now, index: { expires: 90 } },
     },
     {
         collection: 'otp',
