@@ -51,7 +51,7 @@ const messageSchema = new mongoose.Schema(
                 ref: 'User',
             },
         ],
-        emotion: [
+        reactionMess: [
             {
                 idUser: {
                     type: mongoose.Schema.ObjectId,

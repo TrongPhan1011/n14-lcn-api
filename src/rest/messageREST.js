@@ -34,6 +34,33 @@ const messageREST = {
             res.status(500).json(error);
         }
     },
+    addReaction: async (req, res) => {
+        try {
+            var idMess = req.body.id;
+            var dataReaction = req.body.reactionMess;
+
+            var mess = await Message.findById(idMess);
+            if (!!mess) {
+                // chay vong lap de kiem tra user da chon react chua
+                if (!!mess.reactionMess && mess.reactionMess.length > 0) {
+                    for (let reaction of mess.reactionMess) {
+                        if (
+                            reaction.userId === dataReaction.userId &&
+                            reaction.type_emotion === dataReaction.type_emotion
+                        ) {
+                            res.status(200).json(false);
+                        }
+                    }
+                }
+                await mess.updateOne({ $push: { reactionMess: dataReaction } });
+            } else res.status(200).json(false);
+
+            return res.status(200).json(true);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(false);
+        }
+    },
     addMess: async (req, res) => {
         try {
             var newMess = new Message(req.body);
@@ -41,12 +68,11 @@ const messageREST = {
             var saveMess = await newMess.save();
 
             var idChat = newMess.idChat;
-            var chat = GroupChat.findById(idChat);
-            await chat.findOneAndUpdate({ $push: { message: saveMess._id } });
+            var chat = await GroupChat.findById(idChat);
+            await chat.updateOne({ $push: { message: saveMess._id } });
 
             return res.status(200).json(saveMess);
         } catch (error) {
-            console.log(error);
             res.status(500).json(error);
         }
     },
@@ -57,29 +83,21 @@ const messageREST = {
 
             var idGroup = req.params.id;
             var idMess = req.params.idMess;
-            // await Message.findOneAndUpdate({ _id: idMess }, { $set: { status: -1 } }, { safe: true, multi: false });
-            // await GroupChat.findOneAndUpdate(
-            //     { _id: idGroup },
-            //     { $pull: { message: idMess } },
-            //     { safe: true, multi: false },
-            // );
 
-            // var idGroup = req.body.id;
-            // var idMess = req.body.idMess;
             const message = await Message.findById(idMess);
             const chat = await GroupChat.findById(idGroup);
 
-            if (!!chat) {
+            if (!!chat && !!message) {
+                console.log(message);
                 var file = message.file;
-                if (!!file) {
+                if (!!message.file && !!file && file.length > 0) {
                     var length = file.length;
                     for (let i = 0; i < length; i++) {
-                        //console.log(file[i].key);
                         var keyFile = file[i].path.split('https://n14-lcn-bucket.s3.ap-southeast-1.amazonaws.com/')[1];
-                        console.log(keyFile);
+
                         var params = {
                             Bucket: bucketName,
-                            //Key: file[i].key,
+
                             Key: keyFile,
                         };
                         s3.deleteObject(params, function (err, data) {
@@ -92,10 +110,10 @@ const messageREST = {
                 await message.remove();
                 const newChat = await GroupChat.findById(idGroup);
                 return res.status(200).json(newChat);
-            }
+            } else return res.status(200).json(chat);
 
             //return 1 : xoa thanh cong
-            //return res.status(200).json(1);
+            // return res.status(200).json(1);
         } catch (error) {
             console.log(error);
             res.status(500).json(error);
@@ -129,7 +147,8 @@ const messageREST = {
             var listMess = await Message.find({ idChat: req.query.idchat })
                 .sort({ createdAt: -1 })
                 .limit(limit)
-                .populate('authorID');
+                .populate('authorID')
+                .populate({ path: 'reactionMess.idUser', select: 'fullName' });
 
             res.status(200).json(listMess.reverse());
         } catch (error) {

@@ -97,8 +97,8 @@ const userREST = {
     getChatById: async (req, res) => {
         try {
             const chat = await GroupChat.findById(req.params.id);
-
-            return res.status(200).json(chat);
+            if (!!chat) return res.status(200).json(chat);
+            else return res.status(200).json(null);
         } catch (error) {
             res.status(500).json(error);
         }
@@ -245,7 +245,7 @@ const userREST = {
                                 var keyFile = file[i].path.split(
                                     'https://n14-lcn-bucket.s3.ap-southeast-1.amazonaws.com/',
                                 )[1];
-                                console.log(keyFile);
+
                                 var params = {
                                     Bucket: bucketName,
                                     //Key: file[i].key,
@@ -311,11 +311,59 @@ const userREST = {
                     $pull: { adminChat: idUser },
                 });
 
-                console.log(chat._id);
                 await user.updateOne({ $pull: { listGroup: chat._id } });
-                // const newChat = await GroupChat.findById(idChat);
+                // check chat after update
+                const newChat = await GroupChat.findById(idChat);
+                //neu admin khong con ai thi them moi 1 admin bat ki
+                if (newChat.adminChat.length <= 0) {
+                    const newArrMember = await User.find(
+                        { status: 1, listGroup: { $in: [idChat] } },
+                        { _id: 1, fullName: 1, status: 1, profile: 1 },
+                    );
+                    console.log(newArrMember[0]);
+                    await chat.updateOne({ $push: { adminChat: newArrMember[0]._id } });
+                }
+
                 const newUser = await User.findById(idUser);
                 return res.status(200).json(newUser);
+            }
+            return res.status(404).json('Không tìm thấy group chat');
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
+    },
+    changeAvatarGroup: async (req, res) => {
+        try {
+            const idChat = req.query.idChat;
+
+            const newLinkAvatar = req.query.newLink;
+
+            const chat = await GroupChat.findById(idChat);
+
+            if (!!chat) {
+                var curLinkAvatar = chat.avatar || '';
+                console.log(typeof chat.avatar);
+                // remove curLink in s3
+                if (curLinkAvatar !== '') {
+                    var keyFile = curLinkAvatar.split('https://n14-lcn-bucket.s3.ap-southeast-1.amazonaws.com/')[1];
+                    var params = {
+                        Bucket: bucketName,
+                        //Key: file[i].key,
+                        Key: keyFile,
+                    };
+                    s3.deleteObject(params, function (err, data) {
+                        if (err) console.log(err, err.stack);
+                        else console.log('delete', data);
+                    });
+                }
+                await chat.updateOne({
+                    $set: { avatar: newLinkAvatar },
+                });
+
+                // const newChat = await GroupChat.findById(idChat);
+                const newChat = await GroupChat.findById(idChat);
+                return res.status(200).json(newChat);
             }
             return res.status(404).json('Không tìm thấy group chat');
         } catch (error) {
