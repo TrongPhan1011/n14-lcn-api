@@ -21,5 +21,6 @@ router.put('/removeMember/:id', middleAuth.verifyToken, chatREST.removeMemberCha
 router.put('/removeChat/:id', middleAuth.verifyToken, chatREST.removeChat);
 router.put('/memberLeaveChat/:id', middleAuth.verifyToken, chatREST.memberLeaveChat);
 router.put('/changeNameChat/:id', middleAuth.verifyToken, chatREST.changeNameChat);
+router.put('/changeAvatarGroup', middleAuth.verifyToken, chatREST.changeAvatarGroup);
 
 module.exports = router;
