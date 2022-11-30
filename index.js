@@ -40,6 +40,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/otp', otpRoute);
 app.use('/api/file', fileRoute);
 
-app.listen(8080, () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
     console.log('server is running...');
 });
