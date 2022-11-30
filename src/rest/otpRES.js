@@ -33,7 +33,6 @@ const otpREST = {
     },
     banAccount: async (req, res) => {
         try {
-            console.log(req.body.userName);
             const ban = await Ban.create({ email: req.body.userName });
             return res.status(200).json(ban);
         } catch (error) {
@@ -42,7 +41,6 @@ const otpREST = {
     },
     findBanAccount: async (req, res) => {
         try {
-            console.log(req.params.email);
             const ban = await Ban.findOne({ email: req.params.email });
             return res.status(200).json(ban);
         } catch (error) {
@@ -52,7 +50,7 @@ const otpREST = {
     verifyOtp: async (req, res) => {
         try {
             //veirify OTP
-            console.log(req.query);
+
             const otpNhapVao = req.query.otp;
 
             const otpDaGui = await OTP.find({ email: req.query.email });
@@ -65,7 +63,6 @@ const otpREST = {
             // console.log(lastOTP.otp);
 
             if (otpNhapVao !== lastOTP.otp) {
-                console.log('fff');
                 return res.status(401).json('OTP không đúng!');
             } else {
                 await OTP.deleteMany({ email: req.query.email });
