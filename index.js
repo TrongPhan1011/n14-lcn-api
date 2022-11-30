@@ -25,7 +25,7 @@ mongoose.connect(process.env.DATABASE_URL, () => {
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(
     cors({
-        origin: 'https://lcnchat.netlify.app/',
+        origin: process.env.URL_FRONTEND,
         credentials: true,
         origin: true,
     }),

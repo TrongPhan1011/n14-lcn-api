@@ -42,16 +42,16 @@ const messageREST = {
             var mess = await Message.findById(idMess);
             if (!!mess) {
                 // chay vong lap de kiem tra user da chon react chua
-                if (!!mess.reactionMess && mess.reactionMess.length > 0) {
-                    for (let reaction of mess.reactionMess) {
-                        if (
-                            reaction.userId === dataReaction.userId &&
-                            reaction.type_emotion === dataReaction.type_emotion
-                        ) {
-                            res.status(200).json(false);
-                        }
-                    }
-                }
+                // if (!!mess.reactionMess && mess.reactionMess.length > 0) {
+                //     for (let reaction of mess.reactionMess) {
+                //         if (
+                //             reaction.userId === dataReaction.userId &&
+                //             reaction.type_emotion === dataReaction.type_emotion
+                //         ) {
+                //             res.status(200).json(false);
+                //         }
+                //     }
+                // }
                 await mess.updateOne({ $push: { reactionMess: dataReaction } });
             } else res.status(200).json(false);
 
