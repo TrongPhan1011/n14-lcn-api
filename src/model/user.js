@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
         profile: {
             urlAvartar: {
                 type: String,
-                default: '',
+                default: 'https://n14-lcn-bucket.s3.ap-southeast-1.amazonaws.com/9b9148e85719155036ebd6aa1b2c8ba8d41bf70b6f5131ad2679b2bb6e664719',
             },
             urlCoverPhoto: {
                 type: String,
