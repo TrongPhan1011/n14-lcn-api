@@ -25,7 +25,7 @@ const otpREST = {
         };
         // send OTP
         try {
-            // await sgMail.send(message);
+            await sgMail.send(message);
             return res.status(200).json('đã gửi thành công');
         } catch (error) {
             return console.log(error);
@@ -56,11 +56,7 @@ const otpREST = {
             const otpDaGui = await OTP.find({ email: req.query.email });
             const lastOTP = otpDaGui[otpDaGui.length - 1];
 
-            // console.log(lastOTP);
-            // create new auth
-            // console.log(otpDaGui);
-            // userName = email
-            // console.log(lastOTP.otp);
+
 
             if (otpNhapVao !== lastOTP.otp) {
                 return res.status(401).json('OTP không đúng!');
